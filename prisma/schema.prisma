@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -10,4 +8,209 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum TypeFormateur {
+  LOCAL
+  INTERNATIONAL
+  DIASPORA
+}
+
+enum StatutCandidature {
+  EN_COURS
+  SOUMISE
+  PRESELECTIONNEE
+  ACCEPTEE
+  REJETEE
+}
+
+enum StatutVerification {
+  EN_ATTENTE
+  VERIFIEE
+  REJETEE
+}
+
+enum ModaliteIntervention {
+  PRESENTIEL
+  EN_LIGNE
+  HYBRIDE
+}
+
+model Candidat {
+  id                  String            @id @default(uuid())
+  email               String            @unique
+  nomComplet          String?
+  sexe                String?
+  dateNaissance       DateTime?
+  nationalite         String?
+  paysResidence       String?
+  villeResidence      String?
+  whatsapp            String?
+  linkedin            String?
+  cvUrl               String?
+  typeFormateur       TypeFormateur?
+  titreProfessionnel  String?
+  languesParlees      String?
+
+  statut              StatutCandidature @default(EN_COURS)
+  etapeCourante       Int               @default(1)
+  tokenLienMagique    String?           @unique
+  tokenExpiration     DateTime?
+
+  scoreTotal          Int?
+  scoreConfigVersion  Int?
+
+  signatureNom        String?
+  dateSoumission      DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  domaines            DomaineExpertise[]
+  diplomes            Diplome[]
+  certifications      Certification[]
+  experiencesPro      ExperiencePro[]
+  experiencesFormateur ExperienceFormateur[]
+  piecesJointes       PieceJointe[]
+  disponibilite       Disponibilite?
+
+  @@map("candidats")
+}
+
+model DomaineExpertise {
+  id                String   @id @default(uuid())
+  candidatId        String
+  candidat          Candidat @relation(fields: [candidatId], references: [id], onDelete: Cascade)
+
+  domaine           String
+  specialite        String?
+  niveau            String?
+  publics           String?
+  anneesExperience  Int?
+
+  @@map("domaines_expertise")
+}
+
+model Diplome {
+  id              String   @id @default(uuid())
+  candidatId      String
+  candidat        Candidat @relation(fields: [candidatId], references: [id], onDelete: Cascade)
+
+  intitule        String
+  domaineEtudes   String?
+  etablissement   String?
+  pays            String?
+  annee           Int?
+  niveau          String?
+  fichierUrl      String?
+
+  @@map("diplomes")
+}
+
+model Certification {
+  id                  String             @id @default(uuid())
+  candidatId          String
+  candidat            Candidat           @relation(fields: [candidatId], references: [id], onDelete: Cascade)
+
+  nom                 String
+  organisme           String?
+  domaine             String?
+  numero              String?
+  dateObtention       DateTime?
+  dateExpiration      DateTime?
+  pays                String?
+  lienVerification    String?
+  fichierUrl          String?
+  international       Boolean            @default(false)
+  statutVerification  StatutVerification @default(EN_ATTENTE)
+
+  @@map("certifications")
+}
+
+model ExperiencePro {
+  id              String   @id @default(uuid())
+  candidatId      String
+  candidat        Candidat @relation(fields: [candidatId], references: [id], onDelete: Cascade)
+
+  poste           String
+  entreprise      String?
+  secteur         String?
+  pays            String?
+  dateDebut       DateTime?
+  dateFin         DateTime?
+  responsabilites String?
+  realisations    String?
+  attestationUrl  String?
+
+  @@map("experiences_pro")
+}
+
+model ExperienceFormateur {
+  id                  String   @id @default(uuid())
+  candidatId          String
+  candidat            Candidat @relation(fields: [candidatId], references: [id], onDelete: Cascade)
+
+  intituleFormation   String
+  organismeBeneficiaire String?
+  publicForme         String?
+  nbParticipants      Int?
+  dureeHeures         Int?
+  modalite            ModaliteIntervention?
+  pays                String?
+  resultats           String?
+  reference           String?
+
+  @@map("experiences_formateur")
+}
+
+model Disponibilite {
+  candidatId              String   @id
+  candidat                Candidat @relation(fields: [candidatId], references: [id], onDelete: Cascade)
+
+  modalite                ModaliteIntervention?
+  disponibilite           String?
+  mobiliteCameroun        Boolean  @default(false)
+  mobiliteInternationale  Boolean  @default(false)
+  paysIntervention        String?
+  heuresMaxSemaine        Int?
+  dureeMinMission         String?
+  tarifHeure              Float?
+  tarifJour               Float?
+  devise                  String?
+  tarifNegociable         Boolean  @default(false)
+  besoinsLogistiques      String?
+
+  @@map("disponibilites")
+}
+
+model PieceJointe {
+  id          String   @id @default(uuid())
+  candidatId  String
+  candidat    Candidat @relation(fields: [candidatId], references: [id], onDelete: Cascade)
+
+  type        String   // support_pedagogique | video | temoignage | autre
+  url         String
+
+  @@map("pieces_jointes")
+}
+
+model ScoreConfig {
+  id                  Int      @id @default(autoincrement())
+  version             Int      @unique @default(autoincrement())
+  poidsCertifications Int      @default(40)
+  poidsExperience     Int      @default(30)
+  poidsDiplomes       Int      @default(15)
+  poidsDisponibilite  Int      @default(15)
+  createdAt           DateTime @default(now())
+
+  @@map("score_configs")
+}
+
+model Admin {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  motDePasse  String
+  role        String   @default("admin")
+  createdAt   DateTime @default(now())
+
+  @@map("admins")
 }
