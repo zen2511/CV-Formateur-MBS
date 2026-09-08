@@ -1,12 +1,10 @@
-// app/api/candidature/[token]/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
 const CHAMPS_AUTORISES = [
-  'nomComplet', 'sexe', 'dateNaissance', 'nationalite', 'paysResidence',
-  'villeResidence', 'whatsapp', 'linkedin', 'typeFormateur',
-  'titreProfessionnel', 'languesParlees', 'cvUrl',
-  'competencesPedagogiques', 'outilsMaitrises',
+  'modalite', 'disponibilite', 'mobiliteCameroun', 'mobiliteInternationale',
+  'paysIntervention', 'heuresMaxSemaine', 'dureeMinMission',
+  'tarifHeure', 'tarifJour', 'devise', 'tarifNegociable', 'besoinsLogistiques',
 ] as const
 
 export async function PATCH(
@@ -14,11 +12,9 @@ export async function PATCH(
   { params }: { params: Promise<{ token: string }> }
 ) {
   const { token } = await params
-  let body: Record<string, unknown>
+  const body = await req.json().catch(() => null)
 
-  try {
-    body = await req.json()
-  } catch {
+  if (!body) {
     return NextResponse.json({ error: 'Corps de requête invalide.' }, { status: 400 })
   }
 
@@ -29,10 +25,7 @@ export async function PATCH(
   }
 
   if (candidat.statut !== 'EN_COURS') {
-    return NextResponse.json(
-      { error: 'Cette candidature ne peut plus être modifiée.' },
-      { status: 403 }
-    )
+    return NextResponse.json({ error: 'Candidature verrouillée.' }, { status: 403 })
   }
 
   const data: Record<string, unknown> = {}
@@ -42,14 +35,11 @@ export async function PATCH(
     }
   }
 
-  if (data.dateNaissance && typeof data.dateNaissance === 'string') {
-    data.dateNaissance = new Date(data.dateNaissance)
-  }
-
-  const maj = await prisma.candidat.update({
-    where: { id: candidat.id },
-    data,
+  const dispo = await prisma.disponibilite.upsert({
+    where: { candidatId: candidat.id },
+    update: data,
+    create: { candidatId: candidat.id, ...data },
   })
 
-  return NextResponse.json({ success: true, candidat: maj })
+  return NextResponse.json({ success: true, disponibilite: dispo })
 }

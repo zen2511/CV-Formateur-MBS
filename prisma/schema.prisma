@@ -51,6 +51,8 @@ model Candidat {
   typeFormateur       TypeFormateur?
   titreProfessionnel  String?
   languesParlees      String?
+  competencesPedagogiques String?
+  outilsMaitrises         String?
 
   statut              StatutCandidature @default(EN_COURS)
   etapeCourante       Int               @default(1)
