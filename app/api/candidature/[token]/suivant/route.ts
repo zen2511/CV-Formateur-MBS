@@ -86,7 +86,7 @@ export async function POST(
   // Étapes 3 à 8 : validation à ajouter au fur et à mesure qu'on les construit.
 
   const prochaineEtape = Math.min(etapeActuelle + 1, NB_ETAPES)
-  const nouvelleEtapeCourante = Math.max(candidat.etapeCourante, prochaineEtape)
+  const nouvelleEtapeCourante = Math.min(Math.max(candidat.etapeCourante, prochaineEtape), NB_ETAPES)
 
   await prisma.candidat.update({
     where: { id: candidat.id },

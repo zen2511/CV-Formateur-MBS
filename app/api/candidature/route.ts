@@ -4,9 +4,10 @@ import { randomUUID } from 'crypto'
 import { prisma } from '@/lib/prisma'
 import { sendMagicLinkEmail } from '@/lib/mail'
 
+const NB_ETAPES = 6
+
 export async function POST(request: Request) {
   let body: { email?: unknown }
-
   try {
     body = await request.json()
   } catch {
@@ -14,7 +15,6 @@ export async function POST(request: Request) {
   }
 
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
-
   if (!email || !email.includes('@')) {
     return NextResponse.json({ error: 'Adresse email invalide.' }, { status: 400 })
   }
@@ -28,13 +28,20 @@ export async function POST(request: Request) {
     create: { email, tokenLienMagique: token, tokenExpiration: expiration },
   })
 
-  // On tente d'envoyer l'email de reprise, mais un échec (limite Resend, etc.)
-  // ne doit jamais empêcher le candidat d'accéder directement au formulaire.
+  // Plafonne les vieilles candidatures dont etapeCourante > 6 (créées avant la restructuration 8→6 étapes)
+  const etapeCouranteValide = Math.min(candidat.etapeCourante, NB_ETAPES)
+  if (etapeCouranteValide !== candidat.etapeCourante) {
+    await prisma.candidat.update({
+      where: { id: candidat.id },
+      data: { etapeCourante: etapeCouranteValide },
+    })
+  }
+
   try {
     await sendMagicLinkEmail(email, token)
   } catch (err) {
-    console.error('Envoi email échoué (non bloquant) :', err)
+    console.error('Envoi email echoue (non bloquant) :', err)
   }
 
-  return NextResponse.json({ ok: true, token, etapeCourante: candidat.etapeCourante })
+  return NextResponse.json({ ok: true, token, etapeCourante: etapeCouranteValide })
 }
