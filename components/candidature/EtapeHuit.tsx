@@ -106,7 +106,7 @@ export default function EtapeHuit({ candidat, token }: Props) {
 
         <div className="flex justify-between">
           <button
-            onClick={() => router.push(`/candidature/${token}/etape/7`)}
+            onClick={() => router.push(`/candidature/${token}/etape/5`)}
             className="rounded-lg text-sm font-medium px-5 py-2.5 border"
             style={{ borderColor: 'var(--cfp-navy)', color: 'var(--cfp-navy)' }}
           >

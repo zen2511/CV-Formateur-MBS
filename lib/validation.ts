@@ -4,7 +4,6 @@ import type { Disponibilite } from '../src/generated/prisma/client'
 
 export const CHAMPS_REQUIS_ETAPE_1: (keyof Candidat)[] = [
   'nomComplet',
-  'sexe',
   'nationalite',
   'paysResidence',
   'villeResidence',

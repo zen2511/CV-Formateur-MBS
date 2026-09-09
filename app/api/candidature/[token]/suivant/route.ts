@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { CHAMPS_REQUIS_ETAPE_1, etapeEstComplete } from '@/lib/validation'
 import { etapeSeptEstComplete } from '@/lib/validation'
 
-const NB_ETAPES = 8
+const NB_ETAPES = 6
 
 export async function POST(
   req: NextRequest,
@@ -47,27 +47,20 @@ export async function POST(
     }
   }
 
-    if (etapeActuelle === 3) {
-    const nbDiplomes = await prisma.diplome.count({ where: { candidatId: candidat.id } })
+   if (etapeActuelle === 3) {
+    const [nbDiplomes, nbCertifications] = await Promise.all([
+      prisma.diplome.count({ where: { candidatId: candidat.id } }),
+      prisma.certification.count({ where: { candidatId: candidat.id } }),
+    ])
     if (nbDiplomes === 0) {
-      return NextResponse.json(
-        { error: 'Ajoute au moins un diplôme avant de continuer.' },
-        { status: 422 }
-      )
+      return NextResponse.json({ error: 'Ajoute au moins un diplôme avant de continuer.' }, { status: 422 })
+    }
+    if (nbCertifications === 0) {
+      return NextResponse.json({ error: 'Ajoute au moins une certification avant de continuer.' }, { status: 422 })
     }
   }
 
     if (etapeActuelle === 4) {
-    const nbCertifications = await prisma.certification.count({ where: { candidatId: candidat.id } })
-    if (nbCertifications === 0) {
-      return NextResponse.json(
-        { error: 'Ajoute au moins une certification avant de continuer.' },
-        { status: 422 }
-      )
-    }
-  }
-
-    if (etapeActuelle === 5) {
     const [nbPro, nbFormateur] = await Promise.all([
       prisma.experiencePro.count({ where: { candidatId: candidat.id } }),
       prisma.experienceFormateur.count({ where: { candidatId: candidat.id } }),
@@ -80,7 +73,7 @@ export async function POST(
     }
   }
 
-  if (etapeActuelle === 7) {
+  if (etapeActuelle === 5) {
   const dispo = await prisma.disponibilite.findUnique({ where: { candidatId: candidat.id } })
   if (!etapeSeptEstComplete(dispo)) {
     return NextResponse.json(

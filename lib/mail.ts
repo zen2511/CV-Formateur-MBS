@@ -33,3 +33,23 @@ export async function sendMagicLinkEmail(to: string, token: string) {
 
   return data
 }
+export async function sendAcceptanceEmail(to: string, nomComplet: string | null) {
+  const { data, error } = await resend.emails.send({
+    from: FROM,
+    to,
+    subject: 'Votre candidature a été acceptée — CFP-MBS',
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; margin: auto;">
+        <h2>Félicitations, ${nomComplet ?? ''} !</h2>
+        <p>Votre candidature au répertoire des formateurs certifiés du CFP-MBS a été acceptée.</p>
+        <p>Notre équipe vous contactera prochainement pour la suite du processus.</p>
+      </div>
+    `,
+  })
+
+  if (error) {
+    throw new Error(`Échec envoi email: ${error.message}`)
+  }
+
+  return data
+}

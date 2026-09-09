@@ -27,7 +27,15 @@ export default function ConfirmationPage() {
       <p style={{ color: '#6B7280', fontSize: 14, maxWidth: 420, lineHeight: 1.6 }}>
         Elle sera examinée par l&apos;équipe du CFP-MBS. Vous recevrez un email
         dès qu&apos;une décision aura été prise concernant votre profil de formateur.
+
+        href={`/candidature/completer`}
+        style={{ color: '#3A62AA', fontSize: 13, marginTop: 16, textDecoration: 'underline' }}
+      <a>
+        Compléter mon profil avec mes compétences pédagogiques (facultatif)
+      </a>
       </p>
     </div>
   )
 }
+      
+        

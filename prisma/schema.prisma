@@ -143,6 +143,7 @@ model ExperiencePro {
   realisations    String?
   attestationUrl  String?
 
+  posteActuel Boolean @default(false)
   @@map("experiences_pro")
 }
 

@@ -3,6 +3,7 @@
 
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function AdminLogin() {
   const router = useRouter()
@@ -40,43 +41,65 @@ export default function AdminLogin() {
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: 'var(--cfp-navy)' }}>
-      <div className="w-full max-w-sm carte-cfp rounded-2xl shadow-sm border border-slate-200 p-8">
-        <h1 className="text-lg font-semibold text-slate-900 mb-6 text-center">Espace Admin CFP-MBS</h1>
+      <div className="w-full max-w-sm carte-cfp rounded-2xl shadow-xl overflow-hidden">
+        <div className="h-1.5 flex">
+          <div className="flex-1" style={{ backgroundColor: 'var(--cfp-red)' }} />
+          <div className="flex-1" style={{ backgroundColor: 'var(--cfp-blue)' }} />
+          <div className="flex-1" style={{ backgroundColor: 'var(--cfp-green)' }} />
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <label className="block">
-            <span className="block text-sm font-medium text-slate-700 mb-1">Email</span>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
-            />
-          </label>
+        <div className="p-8">
+          <Image
+            src="/logo-mbs.png"
+            alt="CFP-MBS"
+            width={72}
+            height={72}
+            className="rounded-full mb-5 mx-auto shadow-md"
+            priority
+          />
 
-          <label className="block">
-            <span className="block text-sm font-medium text-slate-700 mb-1">Mot de passe</span>
-            <input
-              type="password"
-              required
-              value={motDePasse}
-              onChange={(e) => setMotDePasse(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
-            />
-          </label>
+          <h1 className="text-lg font-semibold text-slate-900 mb-1 text-center">
+            Espace Admin
+          </h1>
+          <p className="text-xs text-slate-500 mb-6 text-center">
+            CFP-MBS - Centre de Formation Professionnelle
+          </p>
 
-          {erreur && <p className="text-sm text-red-600">{erreur}</p>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <label className="block">
+              <span className="block text-sm font-medium text-slate-700 mb-1">Email</span>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
+              />
+            </label>
 
-          <button
-            type="submit"
-            disabled={envoiEnCours}
-            style={{ backgroundColor: 'var(--cfp-navy)' }}
-            className="w-full rounded-lg text-white text-sm font-medium py-2.5 hover:opacity-90 disabled:opacity-60 transition-opacity"
-          >
-            {envoiEnCours ? 'Connexion...' : 'Se connecter'}
-          </button>
-        </form>
+            <label className="block">
+              <span className="block text-sm font-medium text-slate-700 mb-1">Mot de passe</span>
+              <input
+                type="password"
+                required
+                value={motDePasse}
+                onChange={(e) => setMotDePasse(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
+              />
+            </label>
+
+            {erreur && <p className="text-sm text-red-600">{erreur}</p>}
+
+            <button
+              type="submit"
+              disabled={envoiEnCours}
+              style={{ backgroundColor: 'var(--cfp-navy)' }}
+              className="w-full rounded-lg text-white text-sm font-medium py-2.5 hover:opacity-90 disabled:opacity-60 transition-opacity"
+            >
+              {envoiEnCours ? 'Connexion...' : 'Se connecter'}
+            </button>
+          </form>
+        </div>
       </div>
     </main>
   )

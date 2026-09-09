@@ -1,5 +1,6 @@
 // app/admin/page.tsx
 import { prisma } from '@/lib/prisma'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
 
 export default async function AdminDashboard() {
   const [total, enAttente, preselectionnees, acceptees, rejetees, scoreMoyenResult] = await Promise.all([
@@ -28,18 +29,17 @@ export default async function AdminDashboard() {
     },
   })
 
-  const cartes = [
+    const cartes = [
     { label: 'Total soumises', valeur: total, couleur: 'var(--cfp-navy)' },
-    { label: 'En attente', valeur: enAttente, couleur: 'var(--cfp-bleu)' },
-    { label: 'Présélectionnées', valeur: preselectionnees, couleur: 'var(--cfp-vert)' },
-    { label: 'Acceptées', valeur: acceptees, couleur: 'var(--cfp-vert)' },
-    { label: 'Rejetées', valeur: rejetees, couleur: 'var(--cfp-rouge)' },
+    { label: 'En attente', valeur: enAttente, couleur: 'var(--cfp-blue)' },
+    { label: 'Présélectionnées', valeur: preselectionnees, couleur: 'var(--cfp-green)' },
+    { label: 'Acceptées', valeur: acceptees, couleur: 'var(--cfp-green)' },
+    { label: 'Rejetées', valeur: rejetees, couleur: 'var(--cfp-red)' },
   ]
 
   return (
-    <div className="p-8">
-      <h1 className="text-xl font-semibold text-slate-900 mb-1">Dashboard</h1>
-      <p className="text-sm text-slate-500 mb-6">Vue d&apos;ensemble des candidatures</p>
+   <div className="p-8">
+  <AdminPageHeader titre="Dashboard" description="Vue d'ensemble des candidatures" />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
         {cartes.map((c) => (

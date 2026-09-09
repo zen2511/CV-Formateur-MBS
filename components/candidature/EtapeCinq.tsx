@@ -31,7 +31,7 @@ export default function EtapeCinq({ token, experiencesProInitiales, experiencesF
 
   const [nouveauPro, setNouveauPro] = useState({
     poste: '', entreprise: '', secteur: '', pays: '', dateDebut: '', dateFin: '',
-    responsabilites: '', realisations: '',
+    responsabilites: '', realisations: '', posteActuel: false,
   })
 
   const [nouveauFormateur, setNouveauFormateur] = useState({
@@ -56,8 +56,7 @@ export default function EtapeCinq({ token, experiencesProInitiales, experiencesF
     }
     const { experience } = await res.json()
     setExperiencesPro((prev) => [...prev, experience])
-    setNouveauPro({ poste: '', entreprise: '', secteur: '', pays: '', dateDebut: '', dateFin: '', responsabilites: '', realisations: '' })
-    setFormOuvert(false)
+        setNouveauPro({ poste: '', entreprise: '', secteur: '', pays: '', dateDebut: '', dateFin: '', responsabilites: '', realisations: '', posteActuel: false })
   }
 
   async function ajouterFormateur() {
@@ -103,7 +102,7 @@ export default function EtapeCinq({ token, experiencesProInitiales, experiencesF
       const res = await fetch(`/api/candidature/${token}/suivant`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ etapeActuelle: 5 }),
+        body: JSON.stringify({ etapeActuelle: 4 }),
       })
       const data = await res.json()
 
@@ -156,8 +155,9 @@ export default function EtapeCinq({ token, experiencesProInitiales, experiencesF
                 <div key={e.id} className="border border-slate-200 rounded-lg px-4 py-3 flex items-start justify-between">
                   <div>
                     <p className="text-sm font-semibold text-slate-900">{e.poste}</p>
-                    <p className="text-xs text-slate-500">
+                                       <p className="text-xs text-slate-500">
                       {e.entreprise ?? '—'} {e.pays ? `\u00b7 ${e.pays}` : ''}
+                      {e.posteActuel && <span className="ml-1 font-medium" style={{ color: 'var(--cfp-red)' }}>· Poste actuel</span>}
                     </p>
                   </div>
                   <button onClick={() => supprimerPro(e.id)} className="text-xs text-red-500 hover:underline">
@@ -191,6 +191,15 @@ export default function EtapeCinq({ token, experiencesProInitiales, experiencesF
                       onChange={(e) => setNouveauPro({ ...nouveauPro, dateFin: e.target.value })} />
                   </label>
                 </div>
+                                <label className="flex items-center gap-2 text-sm text-slate-600">
+                  <input
+                    type="checkbox"
+                    checked={nouveauPro.posteActuel}
+                    onChange={(e) => setNouveauPro({ ...nouveauPro, posteActuel: e.target.checked })}
+                  />
+                  Il s&apos;agit de mon poste actuel
+                </label>
+
                 <textarea className={champClasse} rows={2} placeholder="Principales responsabilités" value={nouveauPro.responsabilites}
                   onChange={(e) => setNouveauPro({ ...nouveauPro, responsabilites: e.target.value })} />
                 <textarea className={champClasse} rows={2} placeholder="Réalisations significatives" value={nouveauPro.realisations}
@@ -279,7 +288,7 @@ export default function EtapeCinq({ token, experiencesProInitiales, experiencesF
         <div className="flex justify-end">
                   <div className="flex justify-between">
           <button
-            onClick={() => router.push(`/candidature/${token}/etape/4`)}
+            onClick={() => router.push(`/candidature/${token}/etape/3`)}
             className="rounded-lg text-sm font-medium px-5 py-2.5 border"
             style={{ borderColor: 'var(--cfp-navy)', color: 'var(--cfp-navy)' }}
           >

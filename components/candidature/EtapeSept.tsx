@@ -124,7 +124,7 @@ export default function EtapeSept({ disponibilite, token }: Props) {
       const res = await fetch(`/api/candidature/${token}/suivant`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ etapeActuelle: 7 }),
+        body: JSON.stringify({ etapeActuelle: 5 }),
       })
       const data = await res.json()
 
@@ -315,7 +315,7 @@ export default function EtapeSept({ disponibilite, token }: Props) {
 
         <div className="mt-8 flex justify-between">
           <button
-            onClick={() => router.push(`/candidature/${token}/etape/6`)}
+            onClick={() => router.push(`/candidature/${token}/etape/4`)}
             className="rounded-lg border border-slate-300 text-slate-700 text-sm font-medium px-5 py-2.5 hover:bg-slate-50 transition-colors"
           >
             Precedent

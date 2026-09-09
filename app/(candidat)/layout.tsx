@@ -7,10 +7,8 @@ import { usePathname } from 'next/navigation'
 const ETAPES = [
   'Identité & coordonnées',
   "Domaines d'expertise",
-  'Diplômes',
-  'Certifications',
+  'Qualifications',
   'Expériences',
-  'Compétences & supports',
   'Disponibilité & tarifs',
   'Déclaration finale',
 ]

@@ -1,4 +1,4 @@
-// app/admin/layout.tsx
+// app/admin/(protected)/layout.tsx
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
@@ -22,25 +22,38 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect('/admin/login')
   }
 
+  const initiale = session.email.charAt(0).toUpperCase()
+
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: '#F1F3F6' }}>
+    <div className="min-h-screen flex" style={{ backgroundColor: 'var(--cfp-bg)' }}>
       <aside className="w-64 shrink-0 flex flex-col text-white" style={{ backgroundColor: 'var(--cfp-navy)' }}>
         <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
           <Image src="/logo-mbs.png" alt="CFP-MBS" width={40} height={40} className="rounded-full" />
           <div>
             <p className="text-sm font-semibold">CFP-MBS</p>
-            <p className="text-xs text-white/60">Espace admin</p>
+            <p className="text-xs text-white/50">Espace admin</p>
           </div>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-5 space-y-1">
+          <p className="text-[10px] font-semibold text-white/35 uppercase tracking-wider px-3 mb-2">
+            Menu
+          </p>
           {NAV_ITEMS.map((item) => (
             <LienSidebar key={item.href} href={item.href} label={item.label} />
           ))}
         </nav>
 
         <div className="px-3 py-4 border-t border-white/10">
-          <p className="text-xs text-white/40 px-3 mb-2">{session.email}</p>
+          <div className="flex items-center gap-2.5 px-3 py-2 mb-1">
+            <div
+              className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0"
+              style={{ backgroundColor: 'var(--cfp-red)' }}
+            >
+              {initiale}
+            </div>
+            <p className="text-xs text-white/60 truncate">{session.email}</p>
+          </div>
           <form action="/api/admin/logout" method="POST">
             <button
               type="submit"

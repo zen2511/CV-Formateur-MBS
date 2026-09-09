@@ -44,7 +44,7 @@ function versFormData(c: Candidat): FormData {
 }
 
 const CHAMPS_REQUIS: (keyof FormData)[] = [
-  'nomComplet', 'sexe', 'nationalite', 'paysResidence', 'villeResidence',
+  'nomComplet', 'nationalite', 'paysResidence', 'villeResidence',
   'typeFormateur', 'titreProfessionnel', 'cvUrl',
 ]
 
@@ -153,7 +153,7 @@ export default function EtapeUn({ candidat, token }: Props) {
             />
           </Champ>
 
-          <Champ label="Sexe" requis>
+          <Champ label="Sexe">
             <select
               className={champClasse}
               value={form.sexe}

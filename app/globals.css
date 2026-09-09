@@ -2,32 +2,19 @@
 
 :root {
   --cfp-navy: #022753;
+  --cfp-navy-dark: #011a3a;
+
   --cfp-red: #EA1C22;
   --cfp-blue: #3A62AA;
   --cfp-green: #58B746;
+
+  --cfp-rouge: #EA1C22;
+  --cfp-bleu: #3A62AA;
+  --cfp-vert: #58B746;
+
   --cfp-cream: #FBF9F4;
   --cfp-bg: #F4F6F9;
-}
 
-body {
-  background-color: var(--cfp-bg);
-}
-
-.carte-cfp {
-  background-color: var(--cfp-cream);
-}
-
-.carte-cfp {
-  background-color: var(--cfp-cream);
-}
-:root {
-  --cfp-navy: #022753;
-  --cfp-navy-dark: #011a3a;
-  --cfp-rouge: #ea1c22;
-  --cfp-bleu: #3a62aa;
-  --cfp-vert: #58b746;
-}
-:root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -39,15 +26,11 @@ body {
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background-color: var(--cfp-bg);
+  color: var(--foreground);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.carte-cfp {
+  background-color: var(--cfp-cream);
 }
