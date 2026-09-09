@@ -22,20 +22,18 @@ export default function ConfirmationPage() {
         ✓
       </div>
       <h1 style={{ color: '#022753', fontSize: 24, fontWeight: 700, marginBottom: 10 }}>
-        Votre candidature a été enregistrée avec succès
+        Votre candidature a ete enregistree avec succes
       </h1>
       <p style={{ color: '#6B7280', fontSize: 14, maxWidth: 420, lineHeight: 1.6 }}>
-        Elle sera examinée par l&apos;équipe du CFP-MBS. Vous recevrez un email
-        dès qu&apos;une décision aura été prise concernant votre profil de formateur.
-
-        href={`/candidature/completer`}
-        style={{ color: '#3A62AA', fontSize: 13, marginTop: 16, textDecoration: 'underline' }}
-      <a>
-        Compléter mon profil avec mes compétences pédagogiques (facultatif)
-      </a>
+        Elle sera examinee par l&apos;equipe du CFP-MBS. Vous recevrez un email
+        des qu&apos;une decision aura ete prise concernant votre profil de formateur.
       </p>
+      
+        href="/candidature/completer"
+        style={{ color: '#3A62AA', fontSize: 13, marginTop: 16, textDecoration: 'underline' }}
+      >
+        Completer mon profil avec mes competences pedagogiques (facultatif)
+      </a>
     </div>
   )
 }
-      
-        
