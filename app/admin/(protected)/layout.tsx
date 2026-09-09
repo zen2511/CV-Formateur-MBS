@@ -16,7 +16,7 @@ const NAV_ITEMS = [
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies()
   const token = cookieStore.get('admin_session')?.value
-  const session = obtenirSession(token)
+  const session = await obtenirSession(token)
 
   if (!session) {
     redirect('/admin/login')

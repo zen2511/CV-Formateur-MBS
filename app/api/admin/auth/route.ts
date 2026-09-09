@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Identifiants incorrects.' }, { status: 401 })
   }
 
-  const token = creerSession(admin.id, admin.email)
+  const token = await creerSession(admin.id)
 
   const reponse = NextResponse.json({ success: true })
   reponse.cookies.set('admin_session', token, {
